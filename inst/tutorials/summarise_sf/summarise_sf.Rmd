@@ -1,5 +1,5 @@
 ---
-title: "Summarising spatial data with dplyr and sf"
+title: "Exploring attribute and spatial data with dplyr and sf"
 output:
   learnr::tutorial:
     progressive: true
@@ -9,70 +9,102 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 library(learnr)
+library(dplyr)
+library(ggplot2)
+theme_set(theme_minimal())
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+## Getting started
 
-## Topic 1
+For this exercise, we are going to start by working with the `storms` data from the {dplyr} package. Use `summary()` to get a quick overview of the `storms` data:
 
-### Exercise 
+```{r}
+#| label: summary
+#| exercise: TRUE
 
-*Here's a simple exercise with an empty code chunk provided for entering the answer.*
-
-Write the R code required to add two plus two:
-
-```{r two-plus-two, exercise=TRUE}
-
+storms
 ```
 
-### Exercise with Code
+We also need to convert `storms` from a data frame into a sf object. Using column names for longitude and latitude from the summary, fill in the missing coords parameter for `sf::st_as_sf()`:
 
-*Here's an exercise with some prepopulated code as well as `exercise.lines = 5` to provide a bit more initial room to work.*
-
-Now write a function that adds any two numbers and then call it:
-
-```{r add-function, exercise=TRUE, exercise.lines = 5}
-add <- function() {
-  
-}
-```
-
-## Topic 2
-
-### Exercise with Hint
-
-*Here's an exercise where the chunk is pre-evaluated via the `exercise.eval` option (so the user can see the default output we'd like them to customize). We also add a "hint" to the correct solution via the chunk immediate below labeled `print-limit-hint`.*
-
-Modify the following code to limit the number of rows printed to 5:
-
-```{r print-limit, exercise=TRUE, exercise.eval=TRUE}
-mtcars
-```
-
-```{r print-limit-hint}
-head(mtcars)
-```
-
-### Quiz
-
-*You can include any number of single or multiple choice questions as a quiz. Use the `question` function to define a question and the `quiz` function for grouping multiple questions together.*
-
-Some questions to verify that you understand the purposes of various base and recommended R packages:
-
-```{r quiz}
-quiz(
-  question("Which package contains functions for installing other R packages?",
-    answer("base"),
-    answer("tools"),
-    answer("utils", correct = TRUE),
-    answer("codetools")
-  ),
-  question("Which of the R packages listed below are used to create plots?",
-    answer("lattice", correct = TRUE),
-    answer("tools"),
-    answer("stats"),
-    answer("grid", correct = TRUE)
+```{r}
+#| label: st_as_sf
+#| exercise: TRUE
+storms_sf <-
+  sf::st_as_sf(
+    storms,
+    coords = 
   )
-)
 ```
 
+```{r}
+#| label: st_as_sf-hint
+coords = c("long", "lat")
+```
+
+Following the example of the chapter on [Exploratory Data Analysis](https://r4ds.had.co.nz/exploratory-data-analysis.html) in _R for Data Science_, we are going to start by asking questions about our data. Here are the two kinds of questions we can try:
+
+1. What type of variation occurs within our variables?
+2.  What type of covariation occurs between our variables?
+
+You can ask this type of question for any tabular data. When you are working with spatial data, any *variation* may also be spatial variation.
+
+## Exploring variation within variables
+
+You can use a number of different functions from ggplot2, dplyr, and other packages can help explore variation within categorical variables.
+
+### Using `geom_bar()` for categorical variables
+
+`geom_bar()` requires a x or y aesthetic mapping and, by default, counts the number of occurrences for each unique value.
+
+```{r}
+#| label: geom_bar_example
+ggplot(data = storms) +
+  geom_bar(aes(y = status))
+```
+
+### Using `geom_histogram()` for numeric variables
+
+```{r}
+#| label: geom_histogram_example
+ggplot(data = storms) +
+  geom_histogram(aes(x = wind))
+```
+
+### Using `count()` for categorical variables
+
+The `count()` function is a rough equivalent of `df %>% group_by(a, b) %>% summarise(n = n())` with a few additional features. For example, you can set `sort = TRUE` to sort by number of occurences in descending order:
+
+```{r}
+#| label: count_example
+count(storms, status, sort = TRUE)
+```
+
+The `janitor::tabyl()` provides a similar functionality but generates a formatted table in a rendered RMarkdown or Quarto document. 
+
+```{r}
+janitor::tabyl(storms, status)
+```
+
+## Explore variation between variables
+
+### Using `geom_boxplot()` and `geom_point()` for contiuous variables
+
+```{r}
+#| label: geom_boxplot_example
+ggplot(data = storms) +
+  geom_boxplot(aes(x = status, y = wind))
+```
+
+```{r}
+#| label: geom_point_example
+ggplot(data = storms) +
+  geom_point(aes(x = wind, y = pressure), alpha = 0.1)
+```
+
+### Using `janitor::tabyl()` with multiple variables
+
+```{r}
+janitor::tabyl(storms, category, status)
+```
