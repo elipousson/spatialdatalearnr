@@ -1,0 +1,18 @@
+Type: Package
+Package: spatialdatalearnr
+Title: Tutorials and Resources for Building Spatial Data
+Version: 0.1.0
+Authors@R: 
+    person("Eli", "Pousson", , "eli.pousson@gmail.com", role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0001-8280-1706"))
+Maintainer: Eli Pousson <eli.pousson@gmail.com>
+Description: A collection of interactive tutorials created with the learnr
+    package and reference data for the UMBC course Building Spatial Data.
+License: MIT + file LICENSE
+URL: https://github.com/elipousson/spatialdatalearnr
+BugReports: https://github.com/elipousson/spatialdatalearnr/issues
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+Imports: 
+    learnr
