@@ -12,34 +12,32 @@ library(learnr)
 library(dplyr)
 library(ggplot2)
 theme_set(theme_minimal())
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(
+  echo = TRUE
+  )
 ```
 
 ## Getting started
 
 For this exercise, we are going to start by working with the `storms` data from the {dplyr} package. Use `summary()` to get a quick overview of the `storms` data:
 
-```{r}
-#| label: summary
-#| exercise: TRUE
-
+```{r summary, exercise=TRUE}
 storms
 ```
 
-We also need to convert `storms` from a data frame into a sf object. Using column names for longitude and latitude from the summary, fill in the missing coords parameter for `sf::st_as_sf()`:
+We need to convert `storms` from a data frame into a sf object to visualize and explore spatial dimensions. Using column names for longitude and latitude from the summary, fill in the missing coords parameter for `sf::st_as_sf()`:
 
-```{r}
-#| label: st_as_sf
-#| exercise: TRUE
+```{r st_as_sf, exercise=TRUE}
 storms_sf <-
   sf::st_as_sf(
     storms,
     coords = 
   )
+
+class(storms_sf)
 ```
 
-```{r}
-#| label: st_as_sf-hint
+```{r st_as_sf-hint}
 coords = c("long", "lat")
 ```
 
@@ -58,16 +56,14 @@ You can use a number of different functions from ggplot2, dplyr, and other packa
 
 `geom_bar()` requires a x or y aesthetic mapping and, by default, counts the number of occurrences for each unique value.
 
-```{r}
-#| label: geom_bar_example
+```{r geom_bar_example}
 ggplot(data = storms) +
   geom_bar(aes(y = status))
 ```
 
 ### Using `geom_histogram()` for numeric variables
 
-```{r}
-#| label: geom_histogram_example
+```{r geom_histogram_example}
 ggplot(data = storms) +
   geom_histogram(aes(x = wind))
 ```
@@ -76,14 +72,13 @@ ggplot(data = storms) +
 
 The `count()` function is a rough equivalent of `df %>% group_by(a, b) %>% summarise(n = n())` with a few additional features. For example, you can set `sort = TRUE` to sort by number of occurences in descending order:
 
-```{r}
-#| label: count_example
+```{r count_example}
 count(storms, status, sort = TRUE)
 ```
 
 The `janitor::tabyl()` provides a similar functionality but generates a formatted table in a rendered RMarkdown or Quarto document. 
 
-```{r}
+```{r tabyl_example}
 janitor::tabyl(storms, status)
 ```
 
