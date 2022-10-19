@@ -2,20 +2,31 @@
 % Please edit documentation in R/run_spatialdata_tutorial.R
 \name{run_spatialdata_tutorial}
 \alias{run_spatialdata_tutorial}
+\alias{available_spatialdata_tutorials}
 \title{Run a Building Spatial Data interactive tutorial}
 \usage{
 run_spatialdata_tutorial(name, ...)
+
+available_spatialdata_tutorials(...)
 }
 \arguments{
-\item{name}{Tutorial name.}
+\item{name}{Tutorial name (subdirectory within \code{tutorials/} directory of
+installed \code{package}). Alternatively, if \code{package} is not provided, \code{name}
+may be a path to a local tutorial R Markdown file or a local directory
+containing a learnr tutorial. If \code{package} is provided, \code{name} must be the
+tutorial name.}
 
-\item{...}{Additional parameters passed to \code{\link[learnr:run_tutorial]{learnr::run_tutorial()}}}
+\item{...}{Additional parameters passed to \code{\link[learnr:run_tutorial]{learnr::run_tutorial()}}. Not used
+for \code{\link[=available_spatialdata_tutorials]{available_spatialdata_tutorials()}}.}
 }
 \value{
-Launch a learnr exercise.
+Launch a learnr tutorial or list available tutorials.
 }
 \description{
-A wrapper for \code{\link[learnr:run_tutorial]{learnr::run_tutorial()}} with validation for the tutorial name.
+Use \code{\link[=run_spatialdata_tutorial]{run_spatialdata_tutorial()}} to run a tutorial or
+\code{\link[=available_spatialdata_tutorials]{available_spatialdata_tutorials()}} to list available tutorials in this
+package. These function are minimal wrappers for \code{\link[learnr:run_tutorial]{learnr::run_tutorial()}} and
+\code{\link[learnr:available_tutorials]{learnr::available_tutorials()}}.
 }
 \examples{
 \dontrun{
